@@ -35,7 +35,8 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const firebaseApp = initializeApp(firebaseConfig);
+// const firebaseApp =
+initializeApp(firebaseConfig);
 
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({
@@ -67,18 +68,13 @@ export const addCollectionAndDocuments = async (
   console.log("batch completed");
 };
 
-export const getCategoriesAndDocuments = async () => {
-  const collectionRef = collection(db, "categories");
+export const getCategoriesAndDocuments = async (collectionName) => {
+  const collectionRef = collection(db, collectionName);
 
   const q = query(collectionRef);
   const querySnapshot = await getDocs(q);
-  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
-    const { title, items } = docSnapshot.data(); // get the actual data from the docSnapshot
-    acc[title.toLowerCase()] = items; // add items to the title in the acc object
-    return acc;
-  }, {}); // .docs is an array
 
-  return categoryMap;
+  return querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
 };
 
 export const createUserDocumentFromAuth = async (userAuth, additionalInfo) => {
@@ -102,7 +98,7 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInfo) => {
       console.log("error creating the user", error.message);
     }
   }
-  return userDocRef;
+  return userSnapshot;
 };
 
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
@@ -122,4 +118,17 @@ export const signOutUser = async () => await signOut(auth);
 export const onAuthStateChangedListener = (callback) => {
   // if (!callback) return;
   onAuthStateChanged(auth, callback);
+};
+
+export const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (userAuth) => {
+        unsubscribe();
+        resolve(userAuth);
+      },
+      reject
+    );
+  });
 };
