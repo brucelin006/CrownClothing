@@ -17,12 +17,12 @@ import {
   Arrow,
   ImageContainer,
   CheckoutItemContainer,
-} from "./checkout-item.styles.jsx";
+} from "./checkout-item.styles";
 
-import { CartItem } from "../../store/cart/cart.types";
+import { TCartItem } from "../../store/cart/cart.types";
 
 type CheckoutItemProps = {
-  cartItem: CartItem;
+  cartItem: TCartItem;
 };
 
 const CheckoutItem: FC<CheckoutItemProps> = ({ cartItem }) => {

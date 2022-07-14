@@ -6,7 +6,7 @@ import {
   Title,
   Preview,
   CategoryPreviewContainer,
-} from "./category-preview.styles.jsx";
+} from "./category-preview.styles";
 
 import { CategoryItem } from "../../store/categories/category.types";
 

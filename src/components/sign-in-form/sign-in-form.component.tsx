@@ -1,10 +1,12 @@
 import { useState, FormEvent, ChangeEvent } from "react";
 import { useDispatch } from "react-redux";
 
+import { AuthError } from "firebase/auth";
+
 import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
 import FormInput from "../form-input/form-input.component";
 
-import { ButtonsContainer, SignInContainer } from "./sign-in-form.styles.jsx";
+import { ButtonsContainer, SignInContainer } from "./sign-in-form.styles";
 
 import {
   googleSignInStart,
@@ -36,7 +38,7 @@ const SignInForm = () => {
       dispatch(emailSignInStart(email, password));
       resetFormFields();
     } catch (error) {
-      switch (error.code) {
+      switch ((error as AuthError).code) {
         case "auth/wrong-password":
           alert("Incorrect Password.");
           break;
